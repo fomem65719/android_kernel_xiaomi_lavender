@@ -880,8 +880,8 @@ static int adreno_probe(struct platform_device *pdev)
 
 	kgsl_pwrscale_init(&pdev->dev, CONFIG_QCOM_ADRENO_DEFAULT_GOVERNOR);
 
-	/* Initialize coresight for the target */
-	adreno_coresight_init(adreno_dev);
+	place_marker("M - DRIVER GPU Ready");
+
 out:
 	if (status) {
 		adreno_ringbuffer_close(adreno_dev);
