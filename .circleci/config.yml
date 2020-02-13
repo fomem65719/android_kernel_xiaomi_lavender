@@ -1,22 +1,21 @@
 version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
 jobs:
-  compile:
-   docker:
-      - image: ubuntu:18.04
-   steps:
+  build-and-test:
+    executor: python/default
+    steps:
+      - checkout
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
       - run:
-          command: |
-           apt-get -y update && apt-get -y upgrade && apt-get -y install bc build-essential zip curl libstdc++6 git wget python gcc clang libssl-dev repo rsync flex bison
-           git config --global user.name "Yasir-siddiqui"
-           git config --global user.email "www.mohammad.yasir.s@gmail.com"
-           git config --global color.ui false
-           git clone https://github.com/akhilnarang/scripts && cd scripts && bash setup/android_build_env.sh && cd ..
-           mkdir notkernel
-           cd notkernel
-           wget https://github.com/Yasir-siddiqui/android_kernel_xiaomi_lavender/raw/kernel.lnx.4.4.r38-rel/.circleci/build.sh
-           source build.sh
+          command: ./manage.py test
+          name: Test
+
 workflows:
-  version: 2.1
-  cooking:
+  main:
     jobs:
-      - compile
+      - build-and-test
